@@ -10,8 +10,15 @@ const url = 'https://glittery-dull-snickerdoodle.glitch.me/v1/pets';
 export default function PetsPage() {
   const [petsArr, setPetsArr, isLoading] = useApiData(url);
 
-  function handleDelete() {
+  function handleDelete(idToDelete) {
+
     // kai gaunam sekminga istrynimo atsakyma is back end
+
+    axios.delete(`${url}/${idToDelete}`)
+    .then(resp => console.log('resp ===', resp))
+    .catch(error => {
+    console.warn('ivyko klaida:', error);
+    })
     // atnaujinam petsArr kad nebebutu to el kuri istrynem
   }
 
@@ -24,7 +31,7 @@ export default function PetsPage() {
       {isLoading && <p className='text-4xl px-4 py-3 border rounded-md text-center'>Loading... </p>}
       <ul className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
         {petsArr.map((pObj) => (
-          <SinglePetCard key={pObj.id} item={pObj} />
+          <SinglePetCard onDelete={() => handleDelete(pObj.id)} key={pObj.id} item={pObj} />
         ))}
       </ul>
     </div>
